@@ -36,7 +36,7 @@ CREATE TYPE stage_location AS ENUM ('main', 'forest', 'beach');
 CREATE TABLE Stage(
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
-	capacity INT,
+	capacity INT NOT NULL,
 	is_covered BOOLEAN NOT NULL DEFAULT FALSE,
 	location stage_location NOT NULL,
 	festival_id INT REFERENCES Festival(id)
@@ -47,10 +47,10 @@ CREATE TYPE artist_group_type AS ENUM ('solo', 'duo', 'band' , 'DJ');
 CREATE TABLE Artist(
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
-	genre artist_genre,
-	num_members INT,
+	genre artist_genre NOT NULL,
+	num_members INT NOT NULL,
 	is_active BOOLEAN NOT NULL DEFAULT TRUE,
-	group_type artist_group_type,
+	group_type artist_group_type NOT NULL,
 	country_id INT REFERENCES States(id)
 );
 
@@ -58,8 +58,8 @@ CREATE TABLE Performance(
 	id SERIAL PRIMARY KEY,
 	artist_id INT REFERENCES Artist(id),
 	stage_id INT REFERENCES Stage(id),
-	beginning TIMESTAMP,
-	ex_guests INT,
+	beginning TIMESTAMP NOT NULL,
+	ex_guests INT NOT NULL,
 	UNIQUE (artist_id, stage_id,beginning)
 );
 
@@ -88,10 +88,10 @@ CREATE TABLE Workshop(
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
 	festival_id INT REFERENCES Festival(id),
-	difficulty workshop_difficulty,
-	capacity INT,
-	duration INT,
-	date TIMESTAMP,
+	difficulty workshop_difficulty NOT NULL,
+	capacity INT NOT NULL,
+	duration INT NOT NULL,
+	date TIMESTAMP NOT NULL,
 	requires_prior_knowledge BOOLEAN DEFAULT FALSE
 );
 
@@ -101,7 +101,7 @@ CREATE TABLE Mentor(
 	last_name VARCHAR(50) NOT NULL,
 	birth_date TIMESTAMP NOT NULL CHECK(birth_date <= NOW() - INTERVAL '18 years'),
 	exp_years INT NOT NULL CHECK(exp_years > 2),
-	expert_in VARCHAR(50)
+	expert_in VARCHAR(50) NOT NULL
 );
 
 CREATE TYPE application_status AS ENUM ('applied' , 'canceled' , 'done');
@@ -119,8 +119,8 @@ CREATE TABLE Personnel(
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(50) NOT NULL,
 	birth_date TIMESTAMP NOT NULL,
-	contact VARCHAR(20),
-	is_trained BOOLEAN,
+	contact VARCHAR(20) NOT NULL,
+	is_trained BOOLEAN NOT NULL,
 	role personnel_role NOT NULL,
 	festival_id INT REFERENCES Festival(id),
 
